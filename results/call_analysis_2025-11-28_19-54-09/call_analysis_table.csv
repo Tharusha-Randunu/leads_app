@@ -1,0 +1,50 @@
+name,phone,no_of_times_called,employees,first_call_date,last_call_date,total_call_days,avg_gap_between_calls,min_gap_between_calls,max_gap_between_calls,total_time_spent,avg_time_per_call,dates_called
+Unknown,0772851582,25498,"Ann, John",2025-05-30,2025-10-23,143,0.01,0.0,2.0,0:00,0:00,"2025-05-30, 2025-05-31, 2025-06-01, 2025-06-02, 2025-06-03, 2025-06-04, 2025-06-05, 2025-06-06, 2025-06-07, 2025-06-09, 2025-06-10, 2025-06-11, 2025-06-12, 2025-06-13, 2025-06-14, 2025-06-15, 2025-06-16, 2025-06-17, 2025-06-18, 2025-06-19, 2025-06-20, 2025-06-21, 2025-06-23, 2025-06-24, 2025-06-25, 2025-06-26, 2025-06-27, 2025-06-28, 2025-06-30, 2025-07-01, 2025-07-02, 2025-07-03, 2025-07-04, 2025-07-05, 2025-07-06, 2025-07-07, 2025-07-08, 2025-07-09, 2025-07-10, 2025-07-11, 2025-07-12, 2025-07-13, 2025-07-14, 2025-07-15, 2025-07-16, 2025-07-17, 2025-07-18, 2025-07-19, 2025-07-20, 2025-07-21, 2025-07-22, 2025-07-23, 2025-07-24, 2025-07-25, 2025-07-26, 2025-07-27, 2025-07-28, 2025-07-29, 2025-07-30, 2025-07-31, 2025-08-01, 2025-08-02, 2025-08-03, 2025-08-04, 2025-08-05, 2025-08-06, 2025-08-07, 2025-08-09, 2025-08-10, 2025-08-11, 2025-08-12, 2025-08-13, 2025-08-14, 2025-08-15, 2025-08-16, 2025-08-17, 2025-08-18, 2025-08-19, 2025-08-20, 2025-08-21, 2025-08-22, 2025-08-23, 2025-08-24, 2025-08-25, 2025-08-26, 2025-08-27, 2025-08-28, 2025-08-29, 2025-08-30, 2025-08-31, 2025-09-01, 2025-09-02, 2025-09-03, 2025-09-04, 2025-09-05, 2025-09-06, 2025-09-07, 2025-09-08, 2025-09-09, 2025-09-10, 2025-09-11, 2025-09-12, 2025-09-13, 2025-09-14, 2025-09-15, 2025-09-16, 2025-09-17, 2025-09-18, 2025-09-19, 2025-09-20, 2025-09-21, 2025-09-22, 2025-09-23, 2025-09-24, 2025-09-25, 2025-09-26, 2025-09-27, 2025-09-28, 2025-09-29, 2025-09-30, 2025-10-01, 2025-10-02, 2025-10-03, 2025-10-04, 2025-10-05, 2025-10-06, 2025-10-07, 2025-10-08, 2025-10-09, 2025-10-10, 2025-10-11, 2025-10-12, 2025-10-13, 2025-10-14, 2025-10-15, 2025-10-16, 2025-10-17, 2025-10-18, 2025-10-19, 2025-10-20, 2025-10-21, 2025-10-22, 2025-10-23"
+Unknown,0758772776,230,"Ann, John",2025-07-08,2025-10-03,30,0.38,0.0,36.0,0:00,0:00,"2025-07-08, 2025-07-09, 2025-08-14, 2025-08-15, 2025-08-16, 2025-08-17, 2025-08-20, 2025-08-21, 2025-08-24, 2025-08-27, 2025-08-28, 2025-09-07, 2025-09-08, 2025-09-12, 2025-09-15, 2025-09-18, 2025-09-19, 2025-09-20, 2025-09-21, 2025-09-22, 2025-09-23, 2025-09-25, 2025-09-26, 2025-09-27, 2025-09-28, 2025-09-29, 2025-09-30, 2025-10-01, 2025-10-02, 2025-10-03"
+Neranjan Maliyagoda De Silva,0716685681,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Susil Premarathna,0775190469,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Kanishka Darshana Kotawila Vithanage,0760476677,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Nibhath Kumarasinghe,0775542278,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Ayesha Hansani Perera,0718804423,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Madushan Rasanga,0764055711,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Dhanushka dharmasiri,0714818827,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Dulani Mulatiyana Arachchi,0710770182,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+D.M.L.G.C.M.K.DISSANAYAKE,0772123121,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Nirosha Siriwardhana,0774432119,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Manoji Paranavithana,0770536324,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+MoDARA Willaddara,0711647827,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Heshan Subhaddhika,0713584294,2,Ann,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Anfas Ahamed,0750186164,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Sasidu Shenal,0771101841,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+ManishI Kaushalya,0777936309,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Sabra_Zarook,0775395558,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Rashmi Madhushani,0765332384,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+K Shehan Rashmika,0750885848,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Thoufeek Ahamed,0764892184,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Kalpani Pavithra Ranasinghe,0718461705,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Udari Senarathna,0755685273,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Sajikanth Sk,0767780168,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Ruskin Diloshan,0769238899,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Muditha Rubasinghe,0778495650,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Athireyampillai ARUDSELVAN,0770763155,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Vithurjann Jeyababu,0778711551,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Nileshika Dissanayake,0766794244,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Duleeka Madhushani jayasinghe,0713461550,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+ushani sakunthala,0761739645,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Mariyanayagam Judykumaran,0773621136,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Indira Senaratne,0773391373,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Nada Rafa,0717080962,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Shini Sp,0756073172,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Sajeewannie Wanniarachchi,0729038000,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+"Opatha Disanayakalage, Samantha Kalyani Rupasri",0769191554,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Nimashi Ruwindika bandara,0783572008,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+දිනක්ශි  ඒකනායක,0713785315,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Sameeha,0766281780,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Fathima Irshada,0770715655,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Thenusha Thiyageswaran,0768581819,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Lahiru Dissanayake,0777873999,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Bhagya Liyanage,0772090271,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Asanga Sundarapperuma,0773064568,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Lahiru Agalawatte,0767924787,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Daina Daina,0723979688,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data
+Niluminda Dharmawardhane,0789688771,2,John,Unknown,Unknown,0,0.0,0.0,0.0,0:00,0:00,No date data

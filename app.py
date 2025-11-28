@@ -10,14 +10,16 @@ from datetime import datetime
 sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 from data_cleaning import DataCleaner
+from metric_calculator import MetricsCalculator
 
 class LeadAnalysisApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Lead Data Cleaner")
-        self.root.geometry("700x500")
+        self.root.title("Lead Data Cleaner & Call Analyzer")
+        self.root.geometry("800x600")
         
         self.cleaner = DataCleaner()
+        self.metrics_calculator = MetricsCalculator()
         self.current_output_folder = None
         
         self.setup_ui()
@@ -28,14 +30,14 @@ class LeadAnalysisApp:
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Title
-        title_label = ttk.Label(main_frame, text="📁 Lead Data Cleaner", 
+        title_label = ttk.Label(main_frame, text="📊 Lead Data Cleaner & Call Analyzer", 
                                font=("Arial", 16, "bold"))
         title_label.pack(pady=10)
         
         # Instructions
         instructions = ttk.Label(main_frame, 
                                 text="Select your main folder containing employee subfolders with lead files, update files, and call logs.",
-                                wraplength=600, justify=tk.CENTER)
+                                wraplength=700, justify=tk.CENTER)
         instructions.pack(pady=5)
         
         # Folder selection
@@ -47,7 +49,7 @@ class LeadAnalysisApp:
         folder_selection_frame = ttk.Frame(folder_frame)
         folder_selection_frame.pack(fill=tk.X)
         
-        ttk.Entry(folder_selection_frame, textvariable=self.folder_path, width=60).pack(side=tk.LEFT, padx=5)
+        ttk.Entry(folder_selection_frame, textvariable=self.folder_path, width=70).pack(side=tk.LEFT, padx=5)
         ttk.Button(folder_selection_frame, text="Browse Folder", 
                   command=self.select_folder).pack(side=tk.LEFT, padx=5)
         
@@ -55,7 +57,7 @@ class LeadAnalysisApp:
         process_frame = ttk.LabelFrame(main_frame, text="2. Process Data", padding="15")
         process_frame.pack(fill=tk.X, pady=10)
         
-        ttk.Button(process_frame, text="🚀 Start Data Cleaning", 
+        ttk.Button(process_frame, text="🚀 Start Data Processing & Call Analysis", 
                   command=self.process_data).pack(pady=10)
         
         # Progress
@@ -66,7 +68,7 @@ class LeadAnalysisApp:
         self.results_frame = ttk.LabelFrame(main_frame, text="3. Processing Results", padding="15")
         self.results_frame.pack(fill=tk.BOTH, expand=True, pady=10)
         
-        self.results_text = tk.Text(self.results_frame, height=12, wrap=tk.WORD)
+        self.results_text = tk.Text(self.results_frame, height=15, wrap=tk.WORD)
         scrollbar = ttk.Scrollbar(self.results_frame, command=self.results_text.yview)
         self.results_text.config(yscrollcommand=scrollbar.set)
         
@@ -95,68 +97,76 @@ class LeadAnalysisApp:
         
         try:
             self.progress.start()
-            self.log_message("🔄 Starting data processing...")
-            self.log_message("=" * 50)
+            self.log_message("🔄 Starting data processing and call analysis...")
+            self.log_message("=" * 60)
             self.root.update()
             
-            # Process data
+            # Process all data (leads, updates, call logs)
             leads_df, updates_df, call_logs_df = self.cleaner.process_all_data(self.folder_path.get())
             
-            # Save cleaned data to timestamped folder
+            if leads_df.empty and updates_df.empty and call_logs_df.empty:
+                self.progress.stop()
+                self.log_message("❌ No valid data found to process!")
+                return
+            
+            # Generate call analysis from call logs only
+            self.log_message("\n📊 Generating call analysis table...")
+            call_analysis_df = self.metrics_calculator.generate_call_analysis_table(call_logs_df)
+            
+            # Save all results
             base_output_folder = os.path.join(os.path.dirname(__file__), 'results')
-            output_folder = self.cleaner.save_cleaned_data(base_output_folder, leads_df, updates_df, call_logs_df)
+            output_folder = self.metrics_calculator.save_all_reports(
+                base_output_folder, 
+                leads_df, updates_df, call_logs_df, call_analysis_df
+            )
             
             self.progress.stop()
-            self.show_results(leads_df, updates_df, call_logs_df, output_folder)
+            self.show_results(leads_df, updates_df, call_logs_df, call_analysis_df, output_folder)
             
         except Exception as e:
             self.progress.stop()
             self.log_message(f"❌ Error: {str(e)}")
             messagebox.showerror("Processing Error", f"An error occurred: {str(e)}")
     
-    def show_results(self, leads_df, updates_df, call_logs_df, output_folder):
-        self.log_message("\n🎉 DATA CLEANING COMPLETE!")
-        self.log_message("=" * 50)
+    def show_results(self, leads_df, updates_df, call_logs_df, call_analysis_df, output_folder):
+        self.log_message("\n🎉 DATA PROCESSING COMPLETE!")
+        self.log_message("=" * 60)
         
         # Show basic stats
         self.log_message(f"📊 FILES PROCESSED:")
         self.log_message(f"   ✅ Leads: {len(leads_df)} records")
         self.log_message(f"   ✅ Updates: {len(updates_df)} records")
         self.log_message(f"   ✅ Call Logs: {len(call_logs_df)} records")
+        self.log_message(f"   ✅ Unique Phone Numbers Analyzed: {len(call_analysis_df)}")
         
-        # Show city data info
-        if 'city' in leads_df.columns:
-            city_leads = leads_df['city'].notna().sum()
-            self.log_message(f"   📍 Leads with city data: {city_leads}")
-        
-        if 'city' in updates_df.columns:
-            city_updates = updates_df['city'].notna().sum()
-            self.log_message(f"   📍 Updates with city data: {city_updates}")
-        
-        # Show sample data
-        if not leads_df.empty:
-            self.log_message(f"\n📋 SAMPLE LEADS:")
-            for i, (_, lead) in enumerate(leads_df.head(3).iterrows()):
-                city_info = f" | {lead['city']}" if 'city' in lead and pd.notna(lead['city']) else ""
-                self.log_message(f"   {i+1}. {lead['name']} | {lead['phone']} | {lead['email']}{city_info}")
-        
-        if not updates_df.empty:
-            self.log_message(f"\n📋 SAMPLE UPDATES:")
-            for i, (_, update) in enumerate(updates_df.head(3).iterrows()):
-                city_info = f" | {update['city']}" if 'city' in update and pd.notna(update['city']) else ""
-                self.log_message(f"   {i+1}. {update['name']}{city_info} | {update['update_text'][:30]}...")
+        # Show call analysis summary
+        if not call_analysis_df.empty:
+            total_calls = call_analysis_df['no_of_times_called'].sum()
+            avg_calls_per_number = call_analysis_df['no_of_times_called'].mean()
+            
+            self.log_message(f"\n📞 CALL ANALYSIS SUMMARY:")
+            self.log_message(f"   📊 Total calls analyzed: {total_calls}")
+            self.log_message(f"   👥 Unique numbers: {len(call_analysis_df)}")
+            self.log_message(f"   📈 Average calls per number: {avg_calls_per_number:.1f}")
+            
+            # Show top 3 most called numbers
+            top_called = call_analysis_df.nlargest(3, 'no_of_times_called')
+            self.log_message(f"\n🔥 TOP 3 MOST CALLED NUMBERS:")
+            for i, (_, row) in enumerate(top_called.iterrows()):
+                self.log_message(f"   {i+1}. {row['phone']} - {int(row['no_of_times_called'])} calls")
         
         # Show the exact folder path
         folder_name = os.path.basename(output_folder)
-        self.log_message(f"\n💾 CLEANED FILES SAVED TO:")
+        self.log_message(f"\n💾 REPORTS SAVED TO:")
         self.log_message(f"   📁 {output_folder}")
         self.log_message(f"   📄 cleaned_leads.csv")
         self.log_message(f"   📄 cleaned_updates.csv")
         self.log_message(f"   📄 cleaned_call_logs.csv")
         self.log_message(f"   📄 overall_performance.csv")
+        self.log_message(f"   📄 call_analysis_table.csv ← NEW! (Detailed call metrics)")
         self.log_message(f"\n⏰ Timestamp: {folder_name}")
         
-        self.log_message(f"\n✅ Data is now ready for analysis!")
+        self.log_message(f"\n✅ Processing complete! Check the call_analysis_table.csv for detailed call insights.")
         
         # Store the output folder for the open button
         self.current_output_folder = output_folder
@@ -199,7 +209,7 @@ class LeadAnalysisApp:
         self.action_frame.pack_forget()
         self.current_output_folder = None
         self.log_message("🔄 Ready to process another folder...")
-        self.log_message("Please select a new folder and click 'Start Data Cleaning'")
+        self.log_message("Please select a new folder and click 'Start Data Processing & Call Analysis'")
     
     def log_message(self, message):
         self.results_text.insert(tk.END, message + "\n")

@@ -62,12 +62,14 @@ class DataCleaner:
         
         # Handle Sri Lankan numbers
         if cleaned.startswith('94'):
-            cleaned = cleaned[2:]
-        elif cleaned.startswith('0'):
-            cleaned = cleaned[1:]
+            cleaned = '0' + cleaned[2:]
+        elif cleaned.startswith('+94'):
+            cleaned = '0' + cleaned[3:]
+        elif len(cleaned) == 9 and not cleaned.startswith('0'):
+            cleaned = '0' + cleaned
         
-        # Ensure valid length
-        if len(cleaned) >= 9 and len(cleaned) <= 12:
+        # Ensure valid length (10 digits for Sri Lanka)
+        if len(cleaned) == 10 and cleaned.startswith('0'):
             return cleaned
         else:
             return None
@@ -307,12 +309,12 @@ class DataCleaner:
             return pd.DataFrame()
     
     def merge_call_logs(self, call_logs_files):
-        """Merge call log files WITHOUT cleaning - keep all columns as-is"""
+        """Merge call log files WITH phone number standardization"""
         all_call_logs = []
         
         for file in call_logs_files:
             try:
-                # Read file - keep ALL columns
+                # Read file
                 if file.endswith('.csv'):
                     df = pd.read_csv(file)
                 else:
@@ -320,27 +322,45 @@ class DataCleaner:
                 
                 print(f"📖 Reading call logs: {os.path.basename(file)}")
                 
-                # Add employee column from subfolder name
-                df['employee'] = self._extract_employee_name(file)
-                df['original_file'] = os.path.basename(file)
+                # Extract contact info
+                contact_info = self.extract_contact_info(df)
                 
-                all_call_logs.append(df)
+                # Create standardized dataframe
+                call_data = {
+                    'name': contact_info['name'],
+                    'phone': contact_info['phone'],
+                    'original_file': os.path.basename(file),
+                    'employee': self._extract_employee_name(file)
+                }
                 
-                print(f"✅ Processed call logs: {os.path.basename(file)} (kept all {len(df.columns)} columns)")
+                # Add all other columns from the original file
+                for col in df.columns:
+                    col_lower = str(col).lower()
+                    if not any(keyword in col_lower for keyword in ['name', 'phone', 'mobile', 'number']):
+                        call_data[col] = df[col]
+                
+                standardized_df = pd.DataFrame(call_data)
+                all_call_logs.append(standardized_df)
+                
+                print(f"✅ Processed call logs: {os.path.basename(file)}")
                 
             except Exception as e:
                 print(f"❌ Error processing {file}: {e}")
         
         if all_call_logs:
-            # Merge all call logs keeping ALL columns
+            # Merge all call logs
             merged_calls = pd.concat(all_call_logs, ignore_index=True)
             
-            # Remove exact duplicates
-            before_dedup = len(merged_calls)
-            merged_calls = merged_calls.drop_duplicates(keep='first')
-            after_dedup = len(merged_calls)
+            # Clean phone numbers
+            merged_calls['phone_cleaned'] = merged_calls['phone'].apply(self.clean_phone_number)
             
-            print(f"🎯 Call logs: {after_dedup} records, {len(merged_calls.columns)} columns (removed {before_dedup - after_dedup} duplicates)")
+            # Remove rows without valid phone numbers
+            before_clean = len(merged_calls)
+            merged_calls = merged_calls[merged_calls['phone_cleaned'].notna()]
+            after_clean = len(merged_calls)
+            
+            print(f"🎯 Call logs: {after_clean} records with valid phone numbers (removed {before_clean - after_clean} invalid)")
+            
             return merged_calls
         else:
             return pd.DataFrame()
@@ -440,15 +460,6 @@ class DataCleaner:
             total_leads = len(leads_df)
             contact_rate = (contacted_leads / total_leads * 100) if total_leads > 0 else 0
             performance_data.append({'Metric': 'Contact Rate', 'Value': f"{contact_rate:.1f}%"})
-        
-        # City data availability
-        if 'city' in leads_df.columns:
-            city_leads = leads_df['city'].notna().sum()
-            performance_data.append({'Metric': 'Leads with City Data', 'Value': city_leads})
-        
-        if 'city' in updates_df.columns:
-            city_updates = updates_df['city'].notna().sum()
-            performance_data.append({'Metric': 'Updates with City Data', 'Value': city_updates})
         
         # Save performance summary
         performance_df = pd.DataFrame(performance_data)
