@@ -6,9 +6,6 @@ from datetime import datetime
 
 class DataCleaner:
     def __init__(self):
-        self.leads_df = pd.DataFrame()
-        self.updates_df = pd.DataFrame()
-        self.call_logs_df = pd.DataFrame()
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     
     def find_files(self, base_folder):
@@ -384,17 +381,17 @@ class DataCleaner:
         print(f"   Call Logs: {len(call_logs_files)} files")
         
         # Process each category
-        self.leads_df = self.merge_leads_files(leads_files)
-        self.updates_df = self.merge_updates_files(updates_files)
-        self.call_logs_df = self.merge_call_logs(call_logs_files)
+        leads_df = self.merge_leads_files(leads_files)
+        updates_df = self.merge_updates_files(updates_files)
+        call_logs_df = self.merge_call_logs(call_logs_files)
         
         print("\n" + "=" * 50)
         print("✅ DATA PROCESSING COMPLETE")
         print("=" * 50)
         
-        return self.leads_df, self.updates_df, self.call_logs_df
+        return leads_df, updates_df, call_logs_df
     
-    def save_cleaned_data(self, base_output_folder):
+    def save_cleaned_data(self, base_output_folder, leads_df, updates_df, call_logs_df):
         """Save cleaned data to timestamped folder"""
         # Create timestamped folder
         timestamp_folder = f"cleaned_data_{self.timestamp}"
@@ -403,21 +400,57 @@ class DataCleaner:
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
         
-        if not self.leads_df.empty:
-            self.leads_df.to_csv(os.path.join(output_folder, 'cleaned_leads.csv'), index=False)
-            print(f"💾 Saved leads: {len(self.leads_df)} records")
-            if 'city' in self.leads_df.columns:
-                print(f"📍 City data included in leads")
+        # Save cleaned files
+        if not leads_df.empty:
+            leads_df.to_csv(os.path.join(output_folder, 'cleaned_leads.csv'), index=False)
+            print(f"💾 Saved leads: {len(leads_df)} records")
         
-        if not self.updates_df.empty:
-            self.updates_df.to_csv(os.path.join(output_folder, 'cleaned_updates.csv'), index=False)
-            print(f"💾 Saved updates: {len(self.updates_df)} records")
-            if 'city' in self.updates_df.columns:
-                print(f"📍 City data included in updates")
+        if not updates_df.empty:
+            updates_df.to_csv(os.path.join(output_folder, 'cleaned_updates.csv'), index=False)
+            print(f"💾 Saved updates: {len(updates_df)} records")
         
-        if not self.call_logs_df.empty:
-            self.call_logs_df.to_csv(os.path.join(output_folder, 'cleaned_call_logs.csv'), index=False)
-            print(f"💾 Saved call logs: {len(self.call_logs_df)} records, {len(self.call_logs_df.columns)} columns")
+        if not call_logs_df.empty:
+            call_logs_df.to_csv(os.path.join(output_folder, 'cleaned_call_logs.csv'), index=False)
+            print(f"💾 Saved call logs: {len(call_logs_df)} records")
+        
+        # Create and save overall performance summary
+        self._create_overall_performance(output_folder, leads_df, updates_df, call_logs_df)
         
         print(f"📁 All files saved to: {output_folder}")
         return output_folder
+    
+    def _create_overall_performance(self, output_folder, leads_df, updates_df, call_logs_df):
+        """Create simple overall performance summary"""
+        performance_data = []
+        
+        # Basic counts
+        performance_data.append({'Metric': 'Total Leads', 'Value': len(leads_df)})
+        performance_data.append({'Metric': 'Total Updates', 'Value': len(updates_df)})
+        performance_data.append({'Metric': 'Total Call Logs', 'Value': len(call_logs_df)})
+        
+        # Employee counts
+        if not leads_df.empty:
+            employees = leads_df['employee'].nunique()
+            performance_data.append({'Metric': 'Total Employees', 'Value': employees})
+        
+        # Contact rate (simplified)
+        if not leads_df.empty and not updates_df.empty:
+            # Simple contact rate calculation
+            contacted_leads = len(updates_df['phone'].dropna().unique())
+            total_leads = len(leads_df)
+            contact_rate = (contacted_leads / total_leads * 100) if total_leads > 0 else 0
+            performance_data.append({'Metric': 'Contact Rate', 'Value': f"{contact_rate:.1f}%"})
+        
+        # City data availability
+        if 'city' in leads_df.columns:
+            city_leads = leads_df['city'].notna().sum()
+            performance_data.append({'Metric': 'Leads with City Data', 'Value': city_leads})
+        
+        if 'city' in updates_df.columns:
+            city_updates = updates_df['city'].notna().sum()
+            performance_data.append({'Metric': 'Updates with City Data', 'Value': city_updates})
+        
+        # Save performance summary
+        performance_df = pd.DataFrame(performance_data)
+        performance_df.to_csv(os.path.join(output_folder, 'overall_performance.csv'), index=False)
+        print(f"💾 Saved overall performance: {len(performance_df)} metrics")

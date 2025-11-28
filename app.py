@@ -104,7 +104,7 @@ class LeadAnalysisApp:
             
             # Save cleaned data to timestamped folder
             base_output_folder = os.path.join(os.path.dirname(__file__), 'results')
-            output_folder = self.cleaner.save_cleaned_data(base_output_folder)
+            output_folder = self.cleaner.save_cleaned_data(base_output_folder, leads_df, updates_df, call_logs_df)
             
             self.progress.stop()
             self.show_results(leads_df, updates_df, call_logs_df, output_folder)
@@ -153,6 +153,7 @@ class LeadAnalysisApp:
         self.log_message(f"   📄 cleaned_leads.csv")
         self.log_message(f"   📄 cleaned_updates.csv")
         self.log_message(f"   📄 cleaned_call_logs.csv")
+        self.log_message(f"   📄 overall_performance.csv")
         self.log_message(f"\n⏰ Timestamp: {folder_name}")
         
         self.log_message(f"\n✅ Data is now ready for analysis!")
